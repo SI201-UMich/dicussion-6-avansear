@@ -1,7 +1,6 @@
 import os
 import unittest
 
-
 class PollReader():
     """
     A class for reading and analyzing polling data.
@@ -55,19 +54,25 @@ class PollReader():
         """
 
         # iterate through each row of the data
+        skip_header = True
         for i in self.raw_data:
+            if skip_header:
+                skip_header = False
+                continue
 
             # split up the row by column
-            seperated = i.split(' ')
+            seperated = i.strip().split(",")
 
             # map each part of the row to the correct column
-            self.data_dict['month'].append(seperated[0])
-            self.data_dict['date'].append(int(seperated[1]))
-            self.data_dict['sample'].append(int(seperated[2]))
-            self.data_dict['sample type'].append(seperated[2])
-            self.data_dict['Harris result'].append(float(seperated[3]))
-            self.data_dict['Trump result'].append(float(seperated[4]))
+            self.data_dict['month'].append(seperated[0].strip())
+            self.data_dict['date'].append(int(seperated[1].strip()))
 
+            sample_num, sample_type = seperated[2].strip().split()
+            self.data_dict['sample'].append(int(sample_num))
+            self.data_dict['sample type'].append(sample_type)
+            
+            self.data_dict['Harris result'].append(float(seperated[3].strip()))
+            self.data_dict['Trump result'].append(float(seperated[4].strip()))
 
     def highest_polling_candidate(self):
         """
@@ -82,7 +87,6 @@ class PollReader():
         """
         pass
 
-
     def likely_voter_polling_average(self):
         """
         Calculate the average polling percentage for each candidate among likely voters.
@@ -92,7 +96,6 @@ class PollReader():
                    among likely voters, in that order.
         """
         pass
-
 
     def polling_history_change(self):
         """
@@ -106,7 +109,6 @@ class PollReader():
                    Positive values indicate an increase, negative values indicate a decrease.
         """
         pass
-
 
 class TestPollReader(unittest.TestCase):
     """
@@ -144,7 +146,6 @@ class TestPollReader(unittest.TestCase):
         self.assertTrue(f"{harris_change:+.2%}" == "+1.53%")
         self.assertTrue(f"{trump_change:+.2%}" == "+2.07%")
 
-
 def main():
     poll_reader = PollReader('polling_data.csv')
     poll_reader.build_data_dict()
@@ -161,8 +162,6 @@ def main():
     print(f"Polling History Change:")
     print(f"  Harris: {harris_change:+.2%}")
     print(f"  Trump: {trump_change:+.2%}")
-
-
 
 if __name__ == '__main__':
     main()
