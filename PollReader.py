@@ -137,6 +137,32 @@ class PollReader():
             tuple: A tuple containing the net change for Harris and Trump, in that order.
                    Positive values indicate an increase, negative values indicate a decrease.
         """
+        harris_early = self.data_dict['Harris result'][-30:]
+        trump_early = self.data_dict["Trump result"][-30:]
+        harris_late = self.data_dict['Harris result'][:30]
+        trump_late = self.data_dict["Trump result"][:30]
+
+        total_hl = 0
+        for i in harris_late:
+            total_hl += i
+        hl_avg = total_hl / len(harris_late)
+
+        total_he = 0
+        for i in harris_early:
+            total_he += i
+        he_avg = total_he / len(harris_early)
+
+        total_tl = 0
+        for i in trump_late:
+            total_tl += i
+        tl_avg = total_tl / len(trump_late)
+
+        total_te = 0
+        for i in trump_early:
+            total_te += i
+        te_avg = total_te / len(trump_early)
+
+        return (hl_avg - he_avg, tl_avg - te_avg)
         pass
 
 class TestPollReader(unittest.TestCase):
