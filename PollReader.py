@@ -97,9 +97,9 @@ class PollReader():
                 highest_trump = i
 
         if highest_harris > highest_trump:
-            return f"Harris {highest_harris * 100}%"
+            return f"Harris {highest_harris * 100:.1f}%"
         elif highest_trump > highest_harris:
-            return f"Trump {highest_trump * 100}%"
+            return f"Trump {highest_trump * 100:.1f}%"
         pass
 
     def likely_voter_polling_average(self):
